@@ -37,7 +37,7 @@
   code, .mono{ font-family:'JetBrains Mono', monospace; }
   a{ color:inherit; text-decoration:none; }
   ::selection{ background:var(--orange); color:var(--ink); }
-
+ 
   /* background texture */
   .grid-bg{
     position:fixed; inset:0; z-index:0; pointer-events:none;
@@ -52,7 +52,7 @@
   }
   .glow.g1{ top:-200px; left:-150px; width:600px; height:600px; background:var(--orange); border-radius:50%; }
   .glow.g2{ bottom:-250px; right:-200px; width:700px; height:700px; background:var(--mint); border-radius:50%; }
-
+ 
   /* ---------- Book button ---------- */
   .book-wrap{
     position:fixed; top:22px; left:22px; z-index:1000;
@@ -78,7 +78,7 @@
     animation: pulse-dot 1.6s infinite ease-in-out;
   }
   @keyframes pulse-dot{ 0%,100%{ opacity:1; } 50%{ opacity:.25; } }
-
+ 
   .book-panel{
     position:absolute; top:58px; left:0;
     width:260px;
@@ -104,7 +104,7 @@
   .book-option:hover{ background: rgba(255,255,255,0.05); }
   .book-option svg{ width:22px; height:22px; flex-shrink:0; }
   .book-option .sub{ display:block; font-size:11px; color:var(--muted); font-weight:400; margin-top:1px; }
-
+ 
   /* ---------- NAV ---------- */
   nav{
     position:relative; z-index:10;
@@ -125,7 +125,7 @@
   }
   .nav-links a:hover{ color:var(--text); }
   @media (max-width: 720px){ .nav-links{ display:none; } }
-
+ 
   /* ---------- HERO ---------- */
   .hero{
     position:relative; z-index:5;
@@ -136,7 +136,7 @@
     min-height: 78vh;
   }
   @media (max-width: 940px){ .hero{ grid-template-columns:1fr; min-height:auto; padding-top:40px;} }
-
+ 
   .eyebrow{
     display:inline-flex; align-items:center; gap:8px;
     font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--mint);
@@ -144,7 +144,7 @@
     padding:6px 12px; border-radius:999px; margin-bottom:22px;
   }
   .eyebrow .blink{ width:6px; height:6px; border-radius:50%; background:var(--mint); animation:pulse-dot 1.2s infinite; }
-
+ 
   .hero h1{
     font-size: clamp(38px, 5.4vw, 64px);
     line-height: 1.03;
@@ -164,7 +164,7 @@
   .btn-primary:hover{ transform:translateY(-2px); box-shadow:0 10px 26px rgba(255,107,53,0.35); }
   .btn-ghost{ background:transparent; border-color:var(--line); color:var(--text); }
   .btn-ghost:hover{ border-color:var(--mint); color:var(--mint); }
-
+ 
   .terminal{
     background: var(--ink-2);
     border:1px solid var(--line);
@@ -191,7 +191,7 @@
   .terminal-body .c-com{ color:#5c6370; }
   .terminal-body .cursor{ display:inline-block; width:8px; height:16px; background:var(--orange); vertical-align:middle; animation: blink 1s step-end infinite; }
   @keyframes blink{ 50%{ opacity:0; } }
-
+ 
   /* ---------- 3D CUBE ---------- */
   .cube-stage{
     perspective: 1100px; display:flex; align-items:center; justify-content:center;
@@ -225,20 +225,20 @@
   .face-left{ transform: rotateY(-90deg) translateZ(90px); }
   .face-top{ transform: rotateX(90deg) translateZ(90px); }
   .face-bottom{ transform: rotateX(-90deg) translateZ(90px); }
-
+ 
   /* ---------- SECTIONS ---------- */
   section{ position:relative; z-index:5; max-width:1180px; margin:0 auto; padding: 90px 6vw; }
   .section-head{ margin-bottom:50px; max-width:560px; }
   .section-head .eyebrow{ margin-bottom:16px; }
   .section-head h2{ font-size: clamp(28px,3.6vw,40px); margin:0 0 14px; }
   .section-head p{ color:var(--muted); font-size:15.5px; line-height:1.7; margin:0; }
-
+ 
   .divider{
     display:flex; align-items:center; gap:16px; color:var(--muted);
     font-family:'JetBrains Mono',monospace; font-size:13px; margin: 0 6vw;
   }
   .divider::before, .divider::after{ content:''; flex:1; height:1px; background:var(--line); }
-
+ 
   /* about */
   .about-grid{ display:grid; grid-template-columns: 320px 1fr; gap:56px; align-items:start; }
   @media (max-width:800px){ .about-grid{ grid-template-columns:1fr; } }
@@ -251,18 +251,18 @@
   .polaroid:hover{ transform: rotate(0deg) translateY(-4px); }
   .polaroid img{ width:100%; border-radius:10px; display:block; }
   .polaroid .cap{ text-align:center; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--muted); margin-top:12px; }
-
+ 
   .stat-row{ display:flex; gap:34px; margin-top:26px; flex-wrap:wrap; }
   .stat b{ display:block; font-family:'Space Grotesk',sans-serif; font-size:26px; color:var(--orange); }
   .stat span{ font-size:12.5px; color:var(--muted); }
-
+ 
   .about-copy p{ color:var(--muted); font-size:15.5px; line-height:1.8; margin:0 0 18px; max-width:600px; }
   .tag-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
   .tag{
     font-family:'JetBrains Mono',monospace; font-size:12.5px; padding:7px 12px; border-radius:8px;
     background: rgba(255,255,255,0.04); border:1px solid var(--line); color:var(--text);
   }
-
+ 
   /* services */
   .services-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap:22px; }
   @media (max-width:900px){ .services-grid{ grid-template-columns:1fr; } }
@@ -276,7 +276,7 @@
   .service-card h3{ font-size:19px; margin:0 0 10px; }
   .service-card p{ font-size:14px; color:var(--muted); line-height:1.65; margin:0; }
   .service-icon{ width:34px; height:34px; margin-bottom:18px; color:var(--mint); }
-
+ 
   /* process */
   .process-list{ display:flex; flex-direction:column; }
   .process-item{
@@ -287,7 +287,7 @@
   .process-item .pnum{ font-family:'JetBrains Mono',monospace; color:var(--muted); font-size:14px; }
   .process-item h3{ margin:0 0 8px; font-size:19px; }
   .process-item p{ margin:0; color:var(--muted); font-size:14.5px; max-width:560px; line-height:1.65; }
-
+ 
   /* CTA band */
   .cta-band{
     background: linear-gradient(135deg, rgba(255,107,53,0.12), rgba(58,222,201,0.08));
@@ -296,7 +296,7 @@
   }
   .cta-band h2{ font-size: clamp(26px,4vw,38px); margin:0 0 16px; }
   .cta-band p{ color:var(--muted); margin:0 0 30px; }
-
+ 
   footer{
     position:relative; z-index:5; border-top:1px solid var(--line);
     padding: 34px 6vw; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;
@@ -305,20 +305,85 @@
   .foot-socials{ display:flex; gap:16px; }
   .foot-socials a{ color:var(--muted); transition:color .2s ease; }
   .foot-socials a:hover{ color:var(--orange); }
-
+ 
   .overlay-scrim{
     position:fixed; inset:0; background:rgba(0,0,0,0.001); z-index:999; display:none;
   }
   .overlay-scrim.show{ display:block; }
+ 
+  /* ---------- Ambient music player ---------- */
+  .music-wrap{
+    position:fixed; bottom:22px; right:22px; z-index:1000;
+    display:flex; align-items:center; gap:10px;
+  }
+  .music-label{
+    font-family:'JetBrains Mono', monospace; font-size:11.5px; color:var(--muted);
+    background:var(--panel); border:1px solid var(--line);
+    padding:8px 12px; border-radius:999px;
+    opacity:0; transform: translateX(6px);
+    transition: all .25s ease;
+    pointer-events:none;
+    white-space:nowrap;
+  }
+  .music-wrap:hover .music-label{ opacity:1; transform:translateX(0); }
+  .music-btn{
+    width:52px; height:52px; border-radius:50%;
+    background:var(--panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; position:relative;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.4);
+    transition: border-color .25s ease, transform .2s ease;
+    flex-shrink:0;
+  }
+  .music-btn:hover{ transform: translateY(-2px); }
+  .music-btn.on{ border-color: rgba(58,222,201,0.55); }
+  .music-btn svg{ width:20px; height:20px; color:var(--text); z-index:2; }
+  .music-btn .ring{
+    position:absolute; inset:-1px; border-radius:50%;
+    border:1px solid var(--mint); opacity:0; transform:scale(0.85);
+  }
+  .music-btn.on .ring{
+    animation: ring-pulse 2.2s ease-out infinite;
+  }
+  @keyframes ring-pulse{
+    0%{ opacity:0.55; transform:scale(0.85); }
+    80%{ opacity:0; transform:scale(1.35); }
+    100%{ opacity:0; transform:scale(1.35); }
+  }
+  .eq-bars{
+    display:flex; align-items:flex-end; gap:2.5px; height:14px; z-index:2;
+  }
+  .eq-bars span{
+    width:3px; background:var(--mint); border-radius:2px; height:4px;
+    transition: height .15s ease;
+  }
+  .music-btn.on .eq-bars span:nth-child(1){ animation: eq1 1.1s ease-in-out infinite; }
+  .music-btn.on .eq-bars span:nth-child(2){ animation: eq2 0.9s ease-in-out infinite; }
+  .music-btn.on .eq-bars span:nth-child(3){ animation: eq3 1.3s ease-in-out infinite; }
+  @keyframes eq1{ 0%,100%{ height:4px; } 50%{ height:14px; } }
+  @keyframes eq2{ 0%,100%{ height:6px; } 50%{ height:10px; } }
+  @keyframes eq3{ 0%,100%{ height:4px; } 50%{ height:16px; } }
 </style>
 </head>
 <body>
-
+ 
 <div class="grid-bg"></div>
 <div class="glow g1"></div>
 <div class="glow g2"></div>
 <div class="overlay-scrim" id="scrim"></div>
-
+ 
+<!-- AMBIENT MUSIC PLAYER -->
+<div class="music-wrap">
+  <span class="music-label" id="musicLabel">play ambient tune</span>
+  <button class="music-btn" id="musicBtn" aria-label="Toggle background music">
+    <span class="ring"></span>
+    <svg id="musicIconNote" viewBox="0 0 24 24" fill="currentColor"><path d="M9 18V5l12-2v13" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="18.5" cy="16" r="2.5" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+    <div class="eq-bars" id="eqBars" style="display:none;">
+      <span></span><span></span><span></span>
+    </div>
+  </button>
+</div>
+ 
 <!-- BOOK BUTTON -->
 <div class="book-wrap">
   <button class="book-btn" id="bookBtn">
@@ -326,21 +391,21 @@
   </button>
   <div class="book-panel" id="bookPanel">
     <div class="book-panel-label">Reach me directly</div>
-
+ 
     <a class="book-option" id="gmailOpt" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none"><path d="M22 5.5v13a1.5 1.5 0 0 1-1.5 1.5H19V8.2l-7 5.4-7-5.4V20H3.5A1.5 1.5 0 0 1 2 18.5v-13A1.5 1.5 0 0 1 3.5 4h.7L12 10.5 19.8 4h.7A1.5 1.5 0 0 1 22 5.5z" fill="#EA4335"/><path d="M19 8.2V20h1.5A1.5 1.5 0 0 0 22 18.5v-13a1.5 1.5 0 0 0-.3-.9L19 8.2z" fill="#EA4335"/></svg>
       <span>Email me
         <span class="sub">sarveshrokade0707@gmail.com</span>
       </span>
     </a>
-
+ 
     <a class="book-option" id="waOpt" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="#25D366"><path d="M12.02 2C6.5 2 2 6.48 2 12c0 1.85.5 3.6 1.37 5.1L2 22l5.06-1.33A9.94 9.94 0 0 0 12.02 22C17.5 22 22 17.5 22 12S17.5 2 12.02 2zm0 18.1c-1.62 0-3.13-.46-4.42-1.25l-.32-.19-3 .79.8-2.93-.2-.3A8.07 8.07 0 0 1 3.9 12c0-4.48 3.65-8.1 8.12-8.1 4.47 0 8.12 3.63 8.12 8.1s-3.65 8.1-8.12 8.1zm4.47-6.08c-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.16.24-.63.79-.78.95-.14.16-.29.18-.53.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.35-1.67-.14-.24-.02-.37.11-.49.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.32-.75-1.81-.2-.48-.4-.41-.55-.42h-.47c-.16 0-.42.06-.64.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34.99 2.5.12.16 1.71 2.61 4.14 3.66.58.25 1.03.4 1.38.51.58.18 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28z"/></svg>
       <span>WhatsApp me
         <span class="sub">+91 83294 73432</span>
       </span>
     </a>
-
+ 
     <a class="book-option" id="igOpt" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none">
         <defs>
@@ -362,7 +427,7 @@
     </a>
   </div>
 </div>
-
+ 
 <nav>
   <div class="nav-inner">
     <div class="logo">
@@ -382,7 +447,7 @@
     </div>
   </div>
 </nav>
-
+ 
 <!-- HERO -->
 <div class="hero">
   <div>
@@ -393,7 +458,7 @@
       <button class="btn btn-primary" onclick="document.getElementById('bookBtn').click()">Book your website now →</button>
       <a class="btn btn-ghost" href="#services">See services</a>
     </div>
-
+ 
     <div class="terminal">
       <div class="terminal-bar">
         <span></span><span></span><span></span>
@@ -402,7 +467,7 @@
       <div class="terminal-body" id="typedCode"></div>
     </div>
   </div>
-
+ 
   <div class="cube-stage" id="cubeStage">
     <div class="cube" id="cube">
       <div class="face face-front">HTML/CSS</div>
@@ -414,9 +479,9 @@
     </div>
   </div>
 </div>
-
+ 
 <div class="divider">/* 3+ years turning ideas into interfaces */</div>
-
+ 
 <!-- ABOUT -->
 <section id="about">
   <div class="about-grid">
@@ -448,9 +513,9 @@
     </div>
   </div>
 </section>
-
+ 
 <div class="divider">/* what I can build for you */</div>
-
+ 
 <!-- SERVICES -->
 <section id="services">
   <div class="section-head">
@@ -479,9 +544,9 @@
     </div>
   </div>
 </section>
-
+ 
 <div class="divider">/* how a project runs */</div>
-
+ 
 <!-- PROCESS -->
 <section id="process">
   <div class="section-head">
@@ -508,7 +573,7 @@
     </div>
   </div>
 </section>
-
+ 
 <!-- CTA -->
 <section id="contact">
   <div class="cta-band">
@@ -517,7 +582,7 @@
     <button class="btn btn-primary" onclick="document.getElementById('bookBtn').click()">Book your website now →</button>
   </div>
 </section>
-
+ 
 <footer>
   <div class="fnote">// SarveshCodes — designed & built by Sarvesh Rokade</div>
   <div class="foot-socials">
@@ -532,25 +597,25 @@
     </a>
   </div>
 </footer>
-
+ 
 <script>
   // ---- contact links ----
   const GMAIL_URL = "https://mail.google.com/mail/?view=cm&fs=1&to=sarveshrokade0707@gmail.com&su=Website%20Inquiry&body=Hi%20Sarvesh%2C%20I%20want%20a%20website%20to%20be%20made%20by%20you.";
   const WA_URL = "https://wa.me/918329473432?text=" + encodeURIComponent("I want a website to be made by you");
   const IG_URL = "https://instagram.com/sar.vesh_luci_1468";
-
+ 
   document.getElementById('gmailOpt').href = GMAIL_URL;
   document.getElementById('waOpt').href = WA_URL;
   document.getElementById('igOpt').href = IG_URL;
   document.getElementById('gmailFoot').href = GMAIL_URL;
   document.getElementById('waFoot').href = WA_URL;
   document.getElementById('igFoot').href = IG_URL;
-
+ 
   // ---- book button toggle ----
   const bookBtn = document.getElementById('bookBtn');
   const bookPanel = document.getElementById('bookPanel');
   const scrim = document.getElementById('scrim');
-
+ 
   function togglePanel(force){
     const open = force !== undefined ? force : !bookPanel.classList.contains('open');
     bookPanel.classList.toggle('open', open);
@@ -559,7 +624,7 @@
   bookBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePanel(); });
   scrim.addEventListener('click', () => togglePanel(false));
   document.addEventListener('keydown', (e) => { if(e.key === 'Escape') togglePanel(false); });
-
+ 
   // ---- cube mouse parallax tilt ----
   const cube = document.getElementById('cube');
   const stage = document.getElementById('cubeStage');
@@ -575,7 +640,7 @@
   stage.addEventListener('mouseleave', () => {
     cube.style.transform = '';
   });
-
+ 
   // ---- typing terminal effect ----
   const codeLines = [
     { text: 'const developer = {', cls: '' },
@@ -592,7 +657,7 @@
   ];
   const el = document.getElementById('typedCode');
   let li = 0;
-
+ 
   function typeLine(){
     if(li >= codeLines.length){
       el.innerHTML += '<span class="cursor"></span>';
@@ -614,7 +679,195 @@
     setTimeout(typeLine, 260);
   }
   setTimeout(typeLine, 400);
+ 
+  // ---- ambient background music (generated, royalty-free, no audio file needed) ----
+  class AmbientPad {
+    constructor(){ this.ctx = null; this.playing = false; this.chordTimer = null; this.panIndex = 0; }
+ 
+    // build a soft plate-reverb-like impulse response synthetically (no external file needed)
+    buildReverbImpulse(seconds = 3.2, decay = 2.6){
+      const rate = this.ctx.sampleRate;
+      const length = rate * seconds;
+      const impulse = this.ctx.createBuffer(2, length, rate);
+      for (let ch = 0; ch < 2; ch++){
+        const data = impulse.getChannelData(ch);
+        for (let i = 0; i < length; i++){
+          data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, decay);
+        }
+      }
+      return impulse;
+    }
+ 
+    init(){
+      if (this.ctx) return;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AC();
+ 
+      // master + limiter so full volume never clips
+      this.master = this.ctx.createGain();
+      this.master.gain.value = 0.0001;
+ 
+      this.limiter = this.ctx.createDynamicsCompressor();
+      this.limiter.threshold.value = -18;
+      this.limiter.knee.value = 12;
+      this.limiter.ratio.value = 14;
+      this.limiter.attack.value = 0.006;
+      this.limiter.release.value = 0.22;
+ 
+      // makeup gain pushes the compressed signal louder while the limiter keeps it from clipping
+      this.makeup = this.ctx.createGain();
+      this.makeup.gain.value = 2.1;
+ 
+      this.filter = this.ctx.createBiquadFilter();
+      this.filter.type = 'lowpass';
+      this.filter.frequency.value = 1500;
+      this.filter.Q.value = 0.35;
+ 
+      // warm high-shelf roll-off so richer harmonics stay soft, not harsh
+      this.warmth = this.ctx.createBiquadFilter();
+      this.warmth.type = 'highshelf';
+      this.warmth.frequency.value = 3200;
+      this.warmth.gain.value = -6;
+ 
+      // convolver reverb for depth/space, blended in parallel (wet/dry)
+      this.convolver = this.ctx.createConvolver();
+      this.convolver.buffer = this.buildReverbImpulse();
+      this.wetGain = this.ctx.createGain();
+      this.wetGain.gain.value = 0.32;
+      this.dryGain = this.ctx.createGain();
+      this.dryGain.gain.value = 0.85;
+ 
+      this.filter.connect(this.warmth);
+      this.warmth.connect(this.dryGain);
+      this.warmth.connect(this.convolver);
+      this.convolver.connect(this.wetGain);
+      this.dryGain.connect(this.limiter);
+      this.wetGain.connect(this.limiter);
+      this.limiter.connect(this.makeup);
+      this.makeup.connect(this.master);
+      this.master.connect(this.ctx.destination);
+ 
+      // slow LFO breathing the filter, like a soft pad swelling
+      this.lfo = this.ctx.createOscillator();
+      this.lfo.frequency.value = 0.055;
+      this.lfoGain = this.ctx.createGain();
+      this.lfoGain.gain.value = 420;
+      this.lfo.connect(this.lfoGain);
+      this.lfoGain.connect(this.filter.frequency);
+      this.lfo.start();
+ 
+      // very slow vibrato/chorus movement for richness
+      this.vibrato = this.ctx.createOscillator();
+      this.vibrato.frequency.value = 0.12;
+      this.vibratoGain = this.ctx.createGain();
+      this.vibratoGain.gain.value = 3.5;
+      this.vibrato.connect(this.vibratoGain);
+      this.vibrato.start();
+    }
+ 
+    playChord(freqs, duration){
+      const now = this.ctx.currentTime;
+      freqs.forEach((f, idx) => {
+        const pan = this.ctx.createPanner ? null : null;
+        const panner = this.ctx.createStereoPanner ? this.ctx.createStereoPanner() : null;
+        if (panner) panner.pan.value = ((idx / (freqs.length - 1)) - 0.5) * 1.1;
+ 
+        const g = this.ctx.createGain();
+        g.gain.value = 0.0001;
+ 
+        // layer 1: sine body
+        const osc = this.ctx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.value = f;
+ 
+        // layer 2: triangle, slightly detuned, for chorus width
+        const osc2 = this.ctx.createOscillator();
+        osc2.type = 'triangle';
+        osc2.detune.value = 6;
+        osc2.frequency.value = f;
+        this.vibratoGain.connect(osc2.detune);
+ 
+        // layer 3: sub-octave sine for warmth/body
+        const sub = this.ctx.createOscillator();
+        sub.type = 'sine';
+        sub.frequency.value = f / 2;
+        const subGain = this.ctx.createGain();
+        subGain.gain.value = 0.35;
+ 
+        // layer 4: soft saw run through the filter for a touch of shimmer, kept very quiet
+        const shimmer = this.ctx.createOscillator();
+        shimmer.type = 'sawtooth';
+        shimmer.frequency.value = f * 2;
+        const shimmerGain = this.ctx.createGain();
+        shimmerGain.gain.value = 0.05;
+ 
+        osc.connect(g);
+        osc2.connect(g);
+        sub.connect(subGain); subGain.connect(g);
+        shimmer.connect(shimmerGain); shimmerGain.connect(g);
+ 
+        if (panner){ g.connect(panner); panner.connect(this.filter); }
+        else { g.connect(this.filter); }
+ 
+        const peak = 0.32 - idx * 0.02;
+        g.gain.linearRampToValueAtTime(Math.max(peak, 0.14), now + 2.4);
+        g.gain.linearRampToValueAtTime(0.0001, now + duration);
+ 
+        [osc, osc2, sub, shimmer].forEach(o => {
+          o.start(now);
+          o.stop(now + duration + 0.6);
+        });
+      });
+    }
+ 
+    start(){
+      this.init();
+      if (this.ctx.state === 'suspended') this.ctx.resume();
+      this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+      this.master.gain.linearRampToValueAtTime(1.0, this.ctx.currentTime + 2.2);
+      // soft, calm progression (Cmaj9 - Am9 - Fmaj7 - Gsus2) suited to a clean tech portfolio
+      const chords = [
+        [130.81, 164.81, 196.00, 246.94],
+        [110.00, 130.81, 164.81, 196.00],
+        [87.31, 110.00, 130.81, 174.61],
+        [98.00, 123.47, 147.00, 196.00]
+      ];
+      let i = 0;
+      const loop = () => {
+        this.playChord(chords[i % chords.length], 8.5);
+        i++;
+        this.chordTimer = setTimeout(loop, 8000);
+      };
+      loop();
+      this.playing = true;
+    }
+    stop(){
+      if (!this.ctx) return;
+      this.master.gain.cancelScheduledValues(this.ctx.currentTime);
+      this.master.gain.linearRampToValueAtTime(0.0001, this.ctx.currentTime + 1.2);
+      clearTimeout(this.chordTimer);
+      this.playing = false;
+    }
+    toggle(){
+      this.playing ? this.stop() : this.start();
+      return this.playing;
+    }
+  }
+ 
+  const ambient = new AmbientPad();
+  const musicBtn = document.getElementById('musicBtn');
+  const eqBars = document.getElementById('eqBars');
+  const musicIconNote = document.getElementById('musicIconNote');
+  const musicLabel = document.getElementById('musicLabel');
+ 
+  musicBtn.addEventListener('click', () => {
+    const isOn = ambient.toggle();
+    musicBtn.classList.toggle('on', isOn);
+    eqBars.style.display = isOn ? 'flex' : 'none';
+    musicIconNote.style.display = isOn ? 'none' : 'block';
+    musicLabel.textContent = isOn ? 'pause ambient tune' : 'play ambient tune';
+  });
 </script>
-
+ 
 </body>
 </html>
