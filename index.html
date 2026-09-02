@@ -7,6 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <style>
   :root{
     --ink:#0A0E17;
@@ -126,6 +129,21 @@
   }
   .nav-links a:hover{ color:var(--text); }
   @media (max-width: 720px){ .nav-links{ display:none; } }
+
+  .nav-right{ display:flex; align-items:center; gap:30px; }
+  .nav-auth{
+    display:flex; align-items:center; gap:8px;
+    background: var(--panel); border:1px solid var(--line);
+    border-radius:999px; padding:8px 16px 8px 8px;
+    cursor:pointer; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;
+    color:var(--text); transition: border-color .2s ease, transform .2s ease;
+  }
+  .nav-auth:hover{ border-color: rgba(58,222,201,0.5); transform: translateY(-1px); }
+  .nav-auth-signed-out{ display:flex; align-items:center; gap:8px; padding-left:8px; }
+  .nav-auth-signed-in{ display:flex; align-items:center; gap:8px; }
+  .nav-auth-avatar{
+    width:24px; height:24px; border-radius:50%; object-fit:cover; border:1.5px solid var(--mint);
+  }
 
   /* ---------- HERO ---------- */
   .hero{
@@ -656,6 +674,32 @@
   .cc-label{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--mint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px; }
   .cc-value{ font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:20px; margin-bottom:8px; }
   .cc-sub{ font-size:12.5px; color:var(--muted); margin:0; line-height:1.6; }
+
+  /* ---------- Admin-only: who signed in (visible only to site owner) ---------- */
+  .admin-panel{
+    max-width:820px; margin:36px auto 0;
+    background: linear-gradient(180deg, rgba(255,107,53,0.05), var(--panel) 30%);
+    border:1px solid rgba(255,107,53,0.3); border-radius:16px; padding:26px 26px 10px;
+  }
+  .admin-panel-head{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+  .admin-lock-badge{
+    align-self:flex-start; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--orange);
+    background: var(--orange-dim); border:1px solid rgba(255,107,53,0.3);
+    padding:5px 10px; border-radius:999px;
+  }
+  .admin-panel-head h3{ font-family:'Space Grotesk',sans-serif; font-size:17px; margin:0; }
+  .admin-signin-list{ display:flex; flex-direction:column; }
+  .admin-empty{ color:var(--muted); font-size:13.5px; padding:10px 0 16px; }
+  .admin-signin-row{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 0; border-bottom:1px solid var(--line);
+  }
+  .admin-signin-row:last-child{ border-bottom:none; }
+  .admin-signin-avatar{ width:36px; height:36px; border-radius:50%; object-fit:cover; flex-shrink:0; }
+  .admin-signin-meta{ min-width:0; flex:1; }
+  .admin-signin-name{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .admin-signin-email{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .admin-signin-time{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); flex-shrink:0; }
 </style>
 </head>
 <body>
@@ -773,13 +817,24 @@
       </svg>
       <span class="logo-text">Sarvesh<span class="accent">Codes</span></span>
     </div>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#process">Process</a>
-      <a href="#contact">Contact</a>
-      <a href="#client-area">Client Area</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <button class="nav-auth" id="navAuth" onclick="document.getElementById('client-area').scrollIntoView({behavior:'smooth'})">
+        <span class="nav-auth-signed-out" id="navAuthSignedOut">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.63h6.47a5.54 5.54 0 0 1-2.4 3.63v3h3.88c2.27-2.09 3.57-5.17 3.57-8.81z"/><path fill="#34A853" d="M12 24c3.24 0 5.96-1.07 7.95-2.92l-3.88-3c-1.08.72-2.46 1.15-4.07 1.15-3.13 0-5.78-2.11-6.73-4.95H1.26v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.27 14.28A7.2 7.2 0 0 1 4.89 12c0-.79.14-1.56.38-2.28v-3.1H1.26A12 12 0 0 0 0 12c0 1.94.46 3.77 1.26 5.38l4.01-3.1z"/><path fill="#EA4335" d="M12 4.77c1.76 0 3.34.6 4.58 1.79l3.44-3.44C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.69 1.26 6.62l4.01 3.1C6.22 6.88 8.87 4.77 12 4.77z"/></svg>
+          <span>Sign in</span>
+        </span>
+        <span class="nav-auth-signed-in" id="navAuthSignedIn" style="display:none;">
+          <img id="navAuthAvatar" src="" alt="" class="nav-auth-avatar">
+          <span id="navAuthName">Account</span>
+        </span>
+      </button>
     </div>
   </div>
 </nav>
@@ -1038,6 +1093,17 @@
         <div class="cc-value">0 new</div>
         <p class="cc-sub">Reach me anytime via the booking button above.</p>
       </div>
+    </div>
+  </div>
+
+  <!-- ADMIN-ONLY PANEL — only ever shown to the site owner's own Google account -->
+  <div class="admin-panel" id="adminPanel" style="display:none;">
+    <div class="admin-panel-head">
+      <span class="admin-lock-badge">🔒 Private — visible only to you</span>
+      <h3>People who've signed in</h3>
+    </div>
+    <div class="admin-signin-list" id="adminSigninList">
+      <p class="admin-empty" id="adminEmptyMsg">No sign-ins yet.</p>
     </div>
   </div>
 </section>
@@ -1487,22 +1553,44 @@
     // the simulated bar already governs the visible timing above.
   })();
 
-  // ---- Client Area: Google Sign-In (client-side only) ----
+  // ---- Client Area: Google Sign-In + Firebase (records sign-ins, admin-only view) ----
   //
-  // SETUP REQUIRED: replace GOOGLE_CLIENT_ID below with your own OAuth Client ID.
-  // Get one free at https://console.cloud.google.com/apis/credentials
-  //   1. Create a project (or pick an existing one)
-  //   2. Go to "APIs & Services" → "Credentials" → "Create Credentials" → "OAuth client ID"
-  //   3. Application type: "Web application"
-  //   4. Under "Authorized JavaScript origins" add the exact domain you host this site on
-  //      (e.g. https://sarveshcodes.com or https://yourname.github.io)
-  //   5. Copy the generated Client ID and paste it below.
-  //
-  // NOTE: this check is entirely client-side (no server), which is fine for a light
-  // "client area" like this, but it does not offer real backend security. If this
-  // area ever needs to show truly private data per-client, pair this with a backend
-  // (e.g. Firebase Auth) that verifies the Google ID token server-side.
+  // SETUP REQUIRED #1 — Google OAuth Client ID (already done)
   const GOOGLE_CLIENT_ID = "439117809420-shld67i88lc8h6p8ec0fp37njsbva66j.apps.googleusercontent.com";
+
+  // SETUP REQUIRED #2 — Firebase config, needed only for the private "who signed in" admin view.
+  // This is separate from the Client ID above. To get it:
+  //   1. Go to https://console.firebase.google.com and click "Add project"
+  //   2. Choose "My Project 41715" (the SAME Google Cloud project you already made) — don't create a new one
+  //   3. Once inside, go to Build → Firestore Database → Create database → Start in production mode
+  //   4. Go to Project settings (gear icon) → General → scroll to "Your apps" → click the web icon (</>)
+  //      to register a web app, then copy the firebaseConfig object it shows you
+  //   5. Paste those values into FIREBASE_CONFIG below
+  //   6. In Firestore → Rules, paste the rules from the message where this code was given to you, then Publish
+  //   7. In Firebase → Authentication → Sign-in method → enable "Google" as a provider
+  const FIREBASE_CONFIG = {
+    apiKey: "AIzaSyDlM0gzLw27uPwHmAe-mW0Yen8LQ0Uyrmw",
+    authDomain: "civil-epigram-507310-a7.firebaseapp.com",
+    projectId: "civil-epigram-507310-a7",
+    storageBucket: "civil-epigram-507310-a7.firebasestorage.app",
+    messagingSenderId: "439117809420",
+    appId: "1:439117809420:web:27ddb516bce93d61feeb29"
+  };
+
+  // Only this email ever sees the private admin panel — change if needed.
+  const ADMIN_EMAIL = "sarveshrokade0707@gmail.com";
+
+  let firebaseReady = false;
+  let db = null;
+  try {
+    if (FIREBASE_CONFIG.apiKey !== "YOUR_FIREBASE_API_KEY" && window.firebase) {
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+      firebaseReady = true;
+    }
+  } catch (e) {
+    console.warn('Firebase not configured yet — admin sign-in list will stay disabled.', e);
+  }
 
   const clientLocked = document.getElementById('clientLocked');
   const clientDashboard = document.getElementById('clientDashboard');
@@ -1510,6 +1598,14 @@
   const clientName = document.getElementById('clientName');
   const clientEmail = document.getElementById('clientEmail');
   const signOutBtn = document.getElementById('signOutBtn');
+  const adminPanel = document.getElementById('adminPanel');
+  const adminSigninList = document.getElementById('adminSigninList');
+  const adminEmptyMsg = document.getElementById('adminEmptyMsg');
+
+  const navAuthSignedOut = document.getElementById('navAuthSignedOut');
+  const navAuthSignedIn = document.getElementById('navAuthSignedIn');
+  const navAuthAvatar = document.getElementById('navAuthAvatar');
+  const navAuthName = document.getElementById('navAuthName');
 
   function decodeJwt(token){
     try {
@@ -1523,17 +1619,94 @@
     }
   }
 
+  function updateNavChip(profile){
+    if (profile){
+      navAuthSignedOut.style.display = 'none';
+      navAuthSignedIn.style.display = 'flex';
+      navAuthAvatar.src = profile.picture || '';
+      navAuthName.textContent = profile.given_name || profile.name || 'Account';
+    } else {
+      navAuthSignedOut.style.display = 'flex';
+      navAuthSignedIn.style.display = 'none';
+    }
+  }
+
+  function renderAdminList(rows){
+    adminSigninList.innerHTML = '';
+    if (!rows.length){
+      adminSigninList.appendChild(adminEmptyMsg);
+      return;
+    }
+    rows.forEach(row => {
+      const el = document.createElement('div');
+      el.className = 'admin-signin-row';
+      const when = row.lastSignIn && row.lastSignIn.toDate
+        ? row.lastSignIn.toDate().toLocaleString()
+        : '';
+      el.innerHTML = `
+        <img class="admin-signin-avatar" src="${row.picture || ''}" alt="">
+        <div class="admin-signin-meta">
+          <div class="admin-signin-name">${row.name || 'Unknown'}</div>
+          <div class="admin-signin-email">${row.email || ''}</div>
+        </div>
+        <div class="admin-signin-time">${when}</div>
+      `;
+      adminSigninList.appendChild(el);
+    });
+  }
+
+  function loadAdminPanel(){
+    if (!firebaseReady || !db) return;
+    adminPanel.style.display = 'block';
+    db.collection('signins').orderBy('lastSignIn', 'desc').limit(100).get()
+      .then(snapshot => {
+        const rows = [];
+        snapshot.forEach(doc => rows.push(doc.data()));
+        renderAdminList(rows);
+      })
+      .catch(err => console.warn('Could not load sign-ins (check Firestore rules):', err));
+  }
+
+  function recordSignIn(profile, idToken){
+    if (!firebaseReady || !db) return;
+    // Exchange the Google ID token for a real Firebase Auth session, so Firestore's
+    // security rules can verify identity server-side (not just trust the client).
+    const credential = firebase.auth.GoogleAuthProvider.credential(idToken);
+    firebase.auth().signInWithCredential(credential)
+      .then(result => {
+        const uid = result.user.uid;
+        return db.collection('signins').doc(uid).set({
+          name: profile.name || '',
+          email: profile.email || '',
+          picture: profile.picture || '',
+          lastSignIn: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+      })
+      .then(() => {
+        if (profile.email === ADMIN_EMAIL) loadAdminPanel();
+      })
+      .catch(err => console.warn('Could not record sign-in:', err));
+  }
+
   function showDashboard(profile){
     clientLocked.style.display = 'none';
     clientDashboard.style.display = 'block';
     clientAvatar.src = profile.picture || '';
     clientName.textContent = profile.given_name || profile.name || 'there';
     clientEmail.textContent = profile.email || '';
+    updateNavChip(profile);
+    if (profile.email === ADMIN_EMAIL) {
+      loadAdminPanel();
+    } else {
+      adminPanel.style.display = 'none';
+    }
   }
 
   function showLocked(){
     clientLocked.style.display = 'block';
     clientDashboard.style.display = 'none';
+    adminPanel.style.display = 'none';
+    updateNavChip(null);
   }
 
   function handleCredentialResponse(response){
@@ -1541,6 +1714,7 @@
     if (!profile) return;
     sessionStorage.setItem('sc_client_profile', JSON.stringify(profile));
     showDashboard(profile);
+    recordSignIn(profile, response.credential);
   }
   window.handleCredentialResponse = handleCredentialResponse;
 
@@ -1564,7 +1738,10 @@
   // restore session on load, if the visitor already signed in earlier in this browser session
   const savedProfile = sessionStorage.getItem('sc_client_profile');
   if (savedProfile){
-    try { showDashboard(JSON.parse(savedProfile)); } catch(e){ showLocked(); }
+    try {
+      const profile = JSON.parse(savedProfile);
+      showDashboard(profile);
+    } catch(e){ showLocked(); }
   } else {
     showLocked();
   }
@@ -1575,6 +1752,9 @@
     sessionStorage.removeItem('sc_client_profile');
     if (window.google && window.google.accounts && window.google.accounts.id){
       google.accounts.id.disableAutoSelect();
+    }
+    if (firebaseReady && firebase.auth().currentUser){
+      firebase.auth().signOut();
     }
     showLocked();
   });
