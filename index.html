@@ -1765,15 +1765,22 @@
         const status = document.getElementById('statusInput-' + uid).value;
         const invoice = document.getElementById('invoiceInput-' + uid).value.trim() || '—';
         const messages = parseInt(document.getElementById('messagesInput-' + uid).value, 10) || 0;
+        const msg = document.getElementById('saveMsg-' + uid);
         db.collection('signins').doc(uid).set({
           projectStatus: status,
           invoice: invoice,
           messages: messages
         }, { merge: true }).then(() => {
-          const msg = document.getElementById('saveMsg-' + uid);
+          msg.style.color = 'var(--mint)';
+          msg.textContent = 'Saved ✓';
           msg.style.display = 'inline';
-          setTimeout(() => { msg.style.display = 'none'; }, 2000);
-        }).catch(err => console.warn('Could not save changes:', err));
+          setTimeout(() => { msg.style.display = 'none'; }, 2500);
+        }).catch(err => {
+          console.warn('Could not save changes:', err);
+          msg.style.color = 'var(--orange)';
+          msg.textContent = 'Save failed — check Firestore rules';
+          msg.style.display = 'inline';
+        });
       });
     });
   }
