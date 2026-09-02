@@ -700,6 +700,40 @@
   .admin-signin-name{ font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .admin-signin-email{ font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .admin-signin-time{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); flex-shrink:0; }
+  .admin-edit-btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:12px;
+    background:transparent; border:1px solid var(--line); color:var(--text);
+    padding:6px 12px; border-radius:8px; cursor:pointer; margin-left:10px; flex-shrink:0;
+    transition: border-color .2s ease, color .2s ease;
+  }
+  .admin-edit-btn:hover{ border-color:var(--mint); color:var(--mint); }
+  .admin-edit-form{
+    display:none; grid-template-columns: repeat(3, 1fr); gap:10px;
+    background: rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:10px;
+    padding:14px; margin: 4px 0 14px;
+  }
+  .admin-edit-form.open{ display:grid; }
+  .admin-edit-field label{
+    display:block; font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.04em; margin-bottom:6px;
+  }
+  .admin-edit-field select, .admin-edit-field input{
+    width:100%; background:var(--ink-2); border:1px solid var(--line); color:var(--text);
+    border-radius:7px; padding:8px 10px; font-size:13px; font-family:'Inter',sans-serif;
+  }
+  .admin-edit-actions{
+    grid-column: 1 / -1; display:flex; gap:10px; justify-content:flex-end; margin-top:2px;
+  }
+  .admin-save-btn{
+    background:var(--mint); color:#101014; border:none; font-family:'Space Grotesk',sans-serif;
+    font-weight:600; font-size:12.5px; padding:8px 16px; border-radius:8px; cursor:pointer;
+  }
+  .admin-cancel-btn{
+    background:transparent; border:1px solid var(--line); color:var(--muted);
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:12.5px;
+    padding:8px 16px; border-radius:8px; cursor:pointer;
+  }
+  .admin-save-msg{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--mint); margin-left:8px; }
 </style>
 </head>
 <body>
@@ -1080,18 +1114,18 @@
     <div class="client-cards">
       <div class="client-card">
         <div class="cc-label">Project Status</div>
-        <div class="cc-value">In Progress</div>
-        <p class="cc-sub">I'll update this as we move through build milestones.</p>
+        <div class="cc-value" id="ccStatus">In Progress</div>
+        <p class="cc-sub" id="ccStatusSub">I'll update this as we move through build milestones.</p>
       </div>
       <div class="client-card">
         <div class="cc-label">Latest Invoice</div>
-        <div class="cc-value">—</div>
-        <p class="cc-sub">Nothing pending right now.</p>
+        <div class="cc-value" id="ccInvoice">—</div>
+        <p class="cc-sub" id="ccInvoiceSub">Nothing pending right now.</p>
       </div>
       <div class="client-card">
         <div class="cc-label">Messages</div>
-        <div class="cc-value">0 new</div>
-        <p class="cc-sub">Reach me anytime via the booking button above.</p>
+        <div class="cc-value" id="ccMessages">0 new</div>
+        <p class="cc-sub" id="ccMessagesSub">Reach me anytime via the booking button above.</p>
       </div>
     </div>
   </div>
@@ -1631,6 +1665,35 @@
     }
   }
 
+  const ccStatus = document.getElementById('ccStatus');
+  const ccInvoice = document.getElementById('ccInvoice');
+  const ccMessages = document.getElementById('ccMessages');
+  const ccStatusSub = document.getElementById('ccStatusSub');
+  const ccInvoiceSub = document.getElementById('ccInvoiceSub');
+  const ccMessagesSub = document.getElementById('ccMessagesSub');
+
+  const STATUS_SUBTEXT = {
+    'Not Started': "I'll get started and update this soon.",
+    'In Progress': "I'll update this as we move through build milestones.",
+    'In Review': "Take a look and send me any feedback.",
+    'Completed': "Your project is live and finished — thank you!"
+  };
+
+  // pulls this specific signed-in client's real project data and fills their dashboard cards
+  function loadOwnClientData(uid){
+    if (!firebaseReady || !db || !uid) return;
+    db.collection('signins').doc(uid).get().then(doc => {
+      const data = doc.exists ? doc.data() : {};
+      const status = data.projectStatus || 'In Progress';
+      ccStatus.textContent = status;
+      ccStatusSub.textContent = STATUS_SUBTEXT[status] || '';
+      ccInvoice.textContent = data.invoice || '—';
+      ccInvoiceSub.textContent = data.invoice && data.invoice !== '—' ? 'Thanks for your business!' : 'Nothing pending right now.';
+      ccMessages.textContent = (data.messages || 0) + ' new';
+      ccMessagesSub.textContent = 'Reach me anytime via the booking button above.';
+    }).catch(err => console.warn('Could not load your project data:', err));
+  }
+
   function renderAdminList(rows){
     adminSigninList.innerHTML = '';
     if (!rows.length){
@@ -1638,20 +1701,80 @@
       return;
     }
     rows.forEach(row => {
-      const el = document.createElement('div');
-      el.className = 'admin-signin-row';
+      const wrap = document.createElement('div');
       const when = row.lastSignIn && row.lastSignIn.toDate
         ? row.lastSignIn.toDate().toLocaleString()
         : '';
-      el.innerHTML = `
-        <img class="admin-signin-avatar" src="${row.picture || ''}" alt="">
-        <div class="admin-signin-meta">
-          <div class="admin-signin-name">${row.name || 'Unknown'}</div>
-          <div class="admin-signin-email">${row.email || ''}</div>
+      const status = row.projectStatus || 'In Progress';
+      const invoice = row.invoice || '—';
+      const messages = row.messages != null ? row.messages : 0;
+
+      wrap.innerHTML = `
+        <div class="admin-signin-row">
+          <img class="admin-signin-avatar" src="${row.picture || ''}" alt="">
+          <div class="admin-signin-meta">
+            <div class="admin-signin-name">${row.name || 'Unknown'}</div>
+            <div class="admin-signin-email">${row.email || ''}</div>
+          </div>
+          <div class="admin-signin-time">${when}</div>
+          <button class="admin-edit-btn" data-uid="${row.id}">Edit</button>
         </div>
-        <div class="admin-signin-time">${when}</div>
+        <div class="admin-edit-form" id="editForm-${row.id}">
+          <div class="admin-edit-field">
+            <label>Project Status</label>
+            <select id="statusInput-${row.id}">
+              <option value="Not Started"${status === 'Not Started' ? ' selected' : ''}>Not Started</option>
+              <option value="In Progress"${status === 'In Progress' ? ' selected' : ''}>In Progress</option>
+              <option value="In Review"${status === 'In Review' ? ' selected' : ''}>In Review</option>
+              <option value="Completed"${status === 'Completed' ? ' selected' : ''}>Completed</option>
+            </select>
+          </div>
+          <div class="admin-edit-field">
+            <label>Latest Invoice</label>
+            <input type="text" id="invoiceInput-${row.id}" value="${invoice === '—' ? '' : invoice}" placeholder="e.g. ₹599 — Paid">
+          </div>
+          <div class="admin-edit-field">
+            <label>Messages</label>
+            <input type="number" id="messagesInput-${row.id}" value="${messages}" min="0">
+          </div>
+          <div class="admin-edit-actions">
+            <span class="admin-save-msg" id="saveMsg-${row.id}" style="display:none;">Saved ✓</span>
+            <button class="admin-cancel-btn" data-uid="${row.id}" data-action="cancel">Cancel</button>
+            <button class="admin-save-btn" data-uid="${row.id}" data-action="save">Save</button>
+          </div>
+        </div>
       `;
-      adminSigninList.appendChild(el);
+      adminSigninList.appendChild(wrap);
+    });
+
+    // wire up edit / cancel / save for every row just rendered
+    adminSigninList.querySelectorAll('.admin-edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const form = document.getElementById('editForm-' + btn.dataset.uid);
+        form.classList.toggle('open');
+      });
+    });
+    adminSigninList.querySelectorAll('[data-action="cancel"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.getElementById('editForm-' + btn.dataset.uid).classList.remove('open');
+      });
+    });
+    adminSigninList.querySelectorAll('[data-action="save"]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const uid = btn.dataset.uid;
+        const status = document.getElementById('statusInput-' + uid).value;
+        const invoice = document.getElementById('invoiceInput-' + uid).value.trim() || '—';
+        const messages = parseInt(document.getElementById('messagesInput-' + uid).value, 10) || 0;
+        db.collection('signins').doc(uid).set({
+          projectStatus: status,
+          invoice: invoice,
+          messages: messages
+        }, { merge: true }).then(() => {
+          const msg = document.getElementById('saveMsg-' + uid);
+          msg.style.display = 'inline';
+          setTimeout(() => { msg.style.display = 'none'; }, 2000);
+        }).catch(err => console.warn('Could not save changes:', err));
+      });
     });
   }
 
@@ -1661,7 +1784,7 @@
     db.collection('signins').orderBy('lastSignIn', 'desc').limit(100).get()
       .then(snapshot => {
         const rows = [];
-        snapshot.forEach(doc => rows.push(doc.data()));
+        snapshot.forEach(doc => rows.push({ id: doc.id, ...doc.data() }));
         renderAdminList(rows);
       })
       .catch(err => console.warn('Could not load sign-ins (check Firestore rules):', err));
@@ -1680,9 +1803,10 @@
           email: profile.email || '',
           picture: profile.picture || '',
           lastSignIn: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
+        }, { merge: true }).then(() => uid);
       })
-      .then(() => {
+      .then(uid => {
+        loadOwnClientData(uid);
         if (profile.email === ADMIN_EMAIL) loadAdminPanel();
       })
       .catch(err => console.warn('Could not record sign-in:', err));
@@ -1700,7 +1824,11 @@
     } else {
       adminPanel.style.display = 'none';
     }
+    if (firebaseReady && firebase.auth().currentUser){
+      loadOwnClientData(firebase.auth().currentUser.uid);
+    }
   }
+
 
   function showLocked(){
     clientLocked.style.display = 'block';
