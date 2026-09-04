@@ -1141,7 +1141,7 @@
     </div>
   </div>
 </section>
-  <div class="fnote"> </div>
+  <div class="fnote">// SarveshCodes — designed & built by Sarvesh Rokade</div>
   <div class="foot-socials">
     <a id="igFoot" target="_blank" rel="noopener" aria-label="Instagram">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor" stroke="none"/></svg>
@@ -1826,14 +1826,12 @@
     clientName.textContent = profile.given_name || profile.name || 'there';
     clientEmail.textContent = profile.email || '';
     updateNavChip(profile);
-    if (profile.email === ADMIN_EMAIL) {
-      loadAdminPanel();
-    } else {
+    if (profile.email !== ADMIN_EMAIL) {
       adminPanel.style.display = 'none';
     }
-    if (firebaseReady && firebase.auth().currentUser){
-      loadOwnClientData(firebase.auth().currentUser.uid);
-    }
+    // Note: card data (status/invoice/messages) and the admin panel are populated
+    // separately by the onAuthStateChanged listener below, once Firebase confirms
+    // the session — this guarantees fresh data instead of racing Firebase's restore.
   }
 
 
@@ -1882,6 +1880,21 @@
   }
 
   initGoogleSignIn();
+
+  // Firebase's own auth state is the reliable source of truth for "who is actually
+  // signed in right now" — unlike our sessionStorage copy, this is guaranteed to be
+  // correct once it fires, even across page reloads. Whenever it reports a signed-in
+  // user, re-pull their live data from Firestore so the dashboard never shows stale info.
+  if (firebaseReady) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        loadOwnClientData(user.uid);
+        if (user.email === ADMIN_EMAIL) {
+          loadAdminPanel();
+        }
+      }
+    });
+  }
 
   signOutBtn.addEventListener('click', () => {
     sessionStorage.removeItem('sc_client_profile');
